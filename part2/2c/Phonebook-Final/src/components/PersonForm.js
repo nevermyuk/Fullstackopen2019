@@ -1,5 +1,5 @@
 import React,{ useState } from 'react'
-import axios from 'axios'
+import personService from '../services/persons'
 
 const PersonForm = ({persons,setPersons}) => {
   const [ newName, setNewName ] = useState('')
@@ -20,7 +20,15 @@ const PersonForm = ({persons,setPersons}) => {
       number: newNumber
     }    
     if (persons.some(person => person.name === newName)) {
-      return (window.alert(`${newName} is already added to phonebook`))
+      const person = persons.find(person => person.name === newName)
+      console.log(person)
+      const changedPersons =  { ...persons}
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) { 
+        personService.update(person.id,changedPersons)
+        .then(returnedPerson => {
+          setPersons(persons.map(p => p.id !== person.id ? person : returnedPerson.data))
+        })
+      }
     }
 
     if (persons.some(person => person.number === newNumber)) {
@@ -28,18 +36,15 @@ const PersonForm = ({persons,setPersons}) => {
     }
     
     else {
-      axios
-      .post('http://localhost:3001/persons',
-      personObject)
-      .then(response => {
-        axios.get('http://localhost:3001/persons')  //inefficient, 2 request just for POSTING!??!?!?
-        .then(response => {
-        setPersons(response.data)
-      })})      
-      setNewName('')
-      setNewNumber('')
+      personService.create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      }      
     
-    }}
+    }
 
   
 
