@@ -19,19 +19,17 @@ const PersonForm = ({persons,setPersons}) => {
       name: newName,
       number: newNumber
     }    
-    if (persons.some(person => person.name === newName)) {
-      const person = persons.find(person => person.name === newName)
-      console.log(person)
-      const changedPersons =  { ...persons}
+    if (persons.some(person => person.name === newName)) {      //some returns T/F
+      const person = persons.find(person => person.name === newName)           //find returns object
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) { 
-        personService.update(person.id,changedPersons)
+        personService.update(person.id,personObject)
         .then(returnedPerson => {
-          setPersons(persons.map(p => p.id !== person.id ? person : returnedPerson.data))
+          setPersons(persons.map(p => p.id !== person.id ? p:returnedPerson))
         })
       }
     }
 
-    if (persons.some(person => person.number === newNumber)) {
+    else if (persons.some(person => person.number === newNumber)) {
       return (window.alert(`${newNumber} already exist in the phonebook`))
     }
     
