@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import personService from '../services/persons'
 
-const PersonForm = ({persons,setPersons,setSuccessMessage}) => {
+const PersonForm = ({persons,setPersons,setMessage}) => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
 
@@ -25,12 +25,18 @@ const PersonForm = ({persons,setPersons,setSuccessMessage}) => {
         personService.update(person.id,personObject)
         .then(returnedPerson => {
           setPersons(persons.map(p => p.id !== person.id ? p:returnedPerson))
-          setSuccessMessage(`${returnedPerson.name}'s number has been changed to ${newNumber} `)
+          setMessage(`${returnedPerson.name}'s number has been successfully changed to ${newNumber} `)
           setTimeout(() => {
-            setSuccessMessage(null)
+            setMessage(null)
           }, 5000)
         })
-      }
+        .catch(error => {
+          console.log(error)
+          setMessage(`Information of ${person.name} has already been removed from server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+      })}
     }
 
     else if (persons.some(person => person.number === newNumber)) {
@@ -41,9 +47,9 @@ const PersonForm = ({persons,setPersons,setSuccessMessage}) => {
       personService.create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-        setSuccessMessage(`Added ${returnedPerson.name} `)
+        setMessage(`Successfully Added ${returnedPerson.name} `)
         setTimeout(() => {
-          setSuccessMessage(null)
+          setMessage(null)
         }, 5000)
         setNewName('')
         setNewNumber('')

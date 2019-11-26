@@ -8,7 +8,7 @@ import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [successMessage , setSuccessMessage] = useState(null)
+  const [Message , setMessage] = useState(null)
 
 
   useEffect(() => {
@@ -22,13 +22,13 @@ const App = () => {
 
   return (
     <div>
-      <Notification  message ={successMessage}/>
+      <Notification  message = {Message}/>
       <h2>Phonebook</h2>
       <Filter persons = {persons}/>
       <h3>Add a new</h3>
-      <PersonForm persons={persons} setPersons={setPersons} setSuccessMessage={setSuccessMessage} />
+      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
       <h2>Numbers</h2>
-      <Persons persons={persons} setPersons={setPersons}/>
+      <Persons persons={persons} setPersons={setPersons} setMessage={setMessage}/>
     </div>
   )
 }
