@@ -5,10 +5,6 @@
 
 
 
-
-
-
-
 # Functional Programming
 
 - Less Logic
@@ -202,4 +198,37 @@ const hello = (who) => () => {console.log('hello', who)}
 [Fun Fun Functions](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) - Functional Programming in JS
 
 [Index as key](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318)
+
+
+
+
+
+
+
+## Backend - NodeJS and Express
+
+### RESTful/CRUD API
+
+| URL      | verb   | functionality                                                |
+| :------- | :----- | :----------------------------------------------------------- |
+| notes/10 | GET    | fetches a single resource                                    |
+| notes    | GET    | fetches all resources in the collection                      |
+| notes    | POST   | creates a new resource based on the request data             |
+| notes/10 | DELETE | removes the identified resource                              |
+| notes/10 | PUT    | replaces the entire identified resource with the request data |
+| notes/10 | PATCH  | replaces a part of the identified resource with the request data |
+
+### [Route parameters](http://expressjs.com/en/guide/routing.html#route-parameters)
+
+URL segments that are used to capture the values specified at their position in the URL. The captured values are populated in the `req.params` object, with the name of the route parameter specified in the path as their respective keys.
+
+```
+Route path: /users/:userId/books/:bookId
+Request URL: http://localhost:3000/users/34/books/8989
+req.params: { "userId": "34", "bookId": "8989" }
+
+app.get('/users/:userId/books/:bookId', function (req, res) {
+  res.send(req.params)
+})
+```
 
