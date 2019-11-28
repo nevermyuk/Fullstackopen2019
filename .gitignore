@@ -1,2 +1,6 @@
 part3/3a/node_modules/
-part3/3a-exercise/node_modules
+
+
+
+part3/phonebook-backend/build/
+part3/phonebook-backend/node_modules
