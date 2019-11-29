@@ -1,7 +1,11 @@
+require('dotenv').config()
+
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 const app = express()
+
 
 
 app.use(express.static('build'))
@@ -13,38 +17,17 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :c
 )
 
 
-let persons = [
-    {
-        "name": "Arto Hellas",
-        "number": "39-44-5323523",
-        "id": 1
-    },
-    {
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523",
-    "id": 2
-    },
-    {
-    "name": "Dan Abramov",
-    "number": "12-43-234345",
-    "id": 3
-    }
-      
-]
 
 app.get('/api/persons',(req,res) => {
-    console.log(persons)
-    res.json(persons)
+    Person.find({}).then(persons => {
+        res.json(persons.map(person => person.toJSON()))
+    })
 })
 
 app.get('/api/persons/:id',(req,res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person=> person.id===id)
-    if (person) {
-        res.json(person)
-    } else {
-        res.status(404).end()
-    }
+    Person.findbyID(req.params.id).then(person => {
+        res.json(person.toJSON())
+    })
 })
 const generateID = () => {
     return Math.floor(Math.random()*(999999999-1)+1);
@@ -58,26 +41,28 @@ app.post('/api/persons',(req,res) => {
             error: 'Name or number is missing'
         })
     } 
-    if (persons.some(person => person.name === body.name)) {
-        return res.status(400).json({
-            error:'Name must be unique'
-        })
-    }
-    if (persons.some(person => person.number === body.number)) {
-        return res.status(400).json({
-            error:'Number must be unique'
-        })
-    }
+    // if (Person.some(person => person.name === body.name)) {
+    //     return res.status(400).json({
+    //         error:'Name must be unique'
+    //     })
+    // }
+    // if (Person.some(person => person.number === body.number)) {
+    //     return res.status(400).json({
+    //         error:'Number must be unique'
+    //     })
+    // }
 
-    const person = {
+    const person = new Person ({
         name : body.name,
         number : body.number,
-        id: generateID()
-    }
+    })
 
-    persons = persons.concat(person)
+    person.save().then(savedPerson => {
+        res.json(savedPerson.toJSON())
+        console.log(res.json(savedPerson.toJSON())
+        )
+    }).catch(()=>console.log(`FAILED`))
 
-    res.json(persons)
 })
 
 app.delete('/api/persons/:id',(req,res) => {
@@ -102,7 +87,7 @@ const unknownEndpoint = (req, res) => {
   app.use(unknownEndpoint)
 
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT,()=> {
     console.log(`Server running on port ${PORT}`)
 })
