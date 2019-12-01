@@ -46,7 +46,7 @@ const PersonForm = ({persons,setPersons,setMessage}) => {
     else {
       personService.create(personObject)
       .then(returnedPerson => {
-        setPersons(returnedPerson)
+        setPersons(persons.concat(returnedPerson))
         setMessage(`Successfully Added ${personObject.name} `)
         setTimeout(() => {
           setMessage(null)
