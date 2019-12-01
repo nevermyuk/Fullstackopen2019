@@ -53,6 +53,8 @@ const PersonForm = ({persons,setPersons,setMessage}) => {
         }, 5000)
         setNewName('')
         setNewNumber('')
+      }).catch(error => {
+        setMessage(error.response.data.error);
       })
       }      
     
