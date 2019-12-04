@@ -137,7 +137,7 @@ describe('Favourite blogs', () => {
     }
   ]
 
-  test('Returns most liked blog', () => {
+  test('most liked blog', () => {
     const result = listHelper.favouriteBlog(blogs)
     expect(result).toEqual({
       _id: '5a422b3a1b54a676234d17f9',
@@ -146,6 +146,20 @@ describe('Favourite blogs', () => {
       url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
       likes: 12,
       __v: 0
+    })
+  })
+  test('Author with most blogs', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+  test('Author with most likes', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
     })
   })
 })
