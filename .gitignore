@@ -5,3 +5,6 @@ part3/3a/node_modules/
 part3/phonebook-backend/build/
 part3/phonebook-backend/node_modules
 part3/phonebook-backend/.env
+part4/bloglist/node_modules/
+
+part4/bloglist/.env
