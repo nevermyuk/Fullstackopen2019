@@ -11,8 +11,9 @@ describe('when there is initially some blogs saved', () => {
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
     const promiseArray = blogObjects.map( blog => blog.save())
     await Promise.all(promiseArray)
-  }
-  )
+
+
+  })
 
   test('blogs are returned as json', async () => {
     await api.get('/api/blogs')
@@ -68,7 +69,8 @@ describe('actions on specific blogs' , () => {
     const newBlog = {
       title: 'TDD harms architecture',
       author: 'Robert C. Martin',
-      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html'
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      user:'5deb66a5107d431b50278043'
     }
     await api.post('/api/blogs')
       .send(newBlog)
@@ -85,7 +87,8 @@ describe('actions on specific blogs' , () => {
   test('title and url missing from request data, respond with status 400', async () => {
     const noTitleOrURL = {
       author: 'Robert C. Martin',
-      likes:10
+      likes:10,
+      user:'5deb66a5107d431b50278043'
     }
 
     await api.post('/api/blogs')
@@ -118,7 +121,7 @@ describe('actions on specific blogs' , () => {
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1)
 
     const titles = blogsAtEnd.map(r => r.title)
     expect(titles).not.toContain(blogToDelete.title)
@@ -131,7 +134,7 @@ describe('actions on specific blogs' , () => {
     const blogToUpdate= blogsAtStart[0]
 
     const updatedBlogLikes = { ...blogToUpdate,likes:512 }
-    console.log(updatedBlogLikes)
+
 
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
