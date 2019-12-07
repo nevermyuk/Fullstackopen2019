@@ -1,0 +1,10 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiaWQiOiI1ZGViOTkxN2MyZDBlYzE5ZTAyYzQyZjgiLCJpYXQiOjE1NzU3MjEyNjh9.ZCQwLSGj0PtTyUQtsGuJmiFojcVNQ2Xnd9jomwZXx_U
+
+{
+  "title": "Is SPA Or Dynamic Better?",
+  "author": "Rasun Davser",
+  "url": "www.testcom",
+  "likes": 132
+}
