@@ -8,3 +8,7 @@ part3/phonebook-backend/.env
 part4/bloglist/node_modules/
 
 part4/bloglist/.env
+
+part5/bloglist-backend/node_modules
+part5/bloglist-backend/.env
+part5/bloglist-frontend/node_modules
