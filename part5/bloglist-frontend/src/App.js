@@ -5,21 +5,21 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import blogService from './services/blogs' 
 import loginService from './services/login'
-
-
-
+import LoginForm from './components/Login'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 const App = () => {
 
   const [blogs, setblogs] = useState([]) 
   const [newBlog, setNewBlog] = useState('') 
   const [newAuthor, setNewAuthor] = useState('') 
   const [newURL, setNewURL] = useState('') 
-  const [newLike, setNewLike] = useState(0) 
   const [notification, setNotification] = useState({message:null})
  
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
   
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const App = () => {
     blogService.setToken(user.token)
   }
 }, [])
+
 
   const handleLogout = async (event) => {
     event.preventDefault()
@@ -64,6 +65,8 @@ const App = () => {
 
   const rows = () => blogs.map(blog =>
     <Blog
+      setblogs = {setblogs}
+      blogs = {blogs}
       key={blog.id}
       blog={blog}
     />
@@ -79,16 +82,14 @@ const App = () => {
   const handleURLChange = (event) => {
     setNewURL(event.target.value)
   }
-  const handleLikeChange = (event) => {
-    setNewLike(event.target.value)
-  }
+
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
       title: newBlog,
       url: newURL,
       author: newAuthor,
-      likes: newLike
+      likes: 0 
     }
 
     blogService
@@ -98,7 +99,6 @@ const App = () => {
         setNewBlog('')
         setNewAuthor('')
         setNewURL('')
-        setNewLike('')
       })
      notify(`${blogObject.title} by ${blogObject.author} added`)
   }
@@ -107,57 +107,32 @@ const App = () => {
     setTimeout(() => setNotification({ message: null }), 10000)
   }
   
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
-  )
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-    <div>
-    Title:
-      <input
-        value={newBlog}
-        onChange={handleBlogChange}
-      />
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
       </div>
-     <div> Author:
-     <input
-        value={newAuthor}
-        onChange={handleAuthorChange}
-      /> </div>
-      <div> URL:
-      <input
-      value={newURL}
-      onChange={handleURLChange}
-      /></div>
-      <div>Likes 
-      <input
-      value={newLike}
-      onChange={handleLikeChange}
-      /></div>
-      <button type="submit">Add</button>
-    </form>  
-  )
+    )
+  }
+
+ 
+
+  
 
   return (
     <div>
@@ -172,7 +147,13 @@ const App = () => {
           <button onClick={handleLogout}>Log Out</button>
           </p>
           <h1>Create new</h1>
-          {blogForm()}
+          <Togglable buttonLabel="Create">
+  <BlogForm
+    onSubmit={addBlog}
+    value={newBlog}
+    handleChange={handleBlogChange}
+  />
+</Togglable>
           {rows()}
         </div>
       }
