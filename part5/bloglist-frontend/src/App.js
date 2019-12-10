@@ -5,6 +5,9 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import blogService from './services/blogs' 
 import loginService from './services/login'
+
+
+
 const App = () => {
 
   const [blogs, setblogs] = useState([]) 
@@ -12,11 +15,12 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('') 
   const [newURL, setNewURL] = useState('') 
   const [newLike, setNewLike] = useState(0) 
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState({message:null})
+ 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-
+  
 
   useEffect(() => {
     blogService
@@ -53,10 +57,8 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      notify('Wrong username or password','error')
+  
     }
   }
 
@@ -98,8 +100,12 @@ const App = () => {
         setNewURL('')
         setNewLike('')
       })
+     notify(`${blogObject.title} by ${blogObject.author} added`)
   }
-
+  const notify = (message, type='success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification({ message: null }), 10000)
+  }
   
   const loginForm = () => (
     <form onSubmit={handleLogin}>
@@ -149,7 +155,7 @@ const App = () => {
       value={newLike}
       onChange={handleLikeChange}
       /></div>
-      <button type="submit">Save</button>
+      <button type="submit">Add</button>
     </form>  
   )
 
@@ -157,7 +163,7 @@ const App = () => {
     <div>
       <h1>blogs</h1>
 
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
 
        {user === null ?
         loginForm() :
