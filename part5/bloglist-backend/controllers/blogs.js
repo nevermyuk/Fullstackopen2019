@@ -1,16 +1,16 @@
-const router = require('express').Router()
+const blogRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-router.get('/', async (request, response) => {
+blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})  
     .populate('user', { username: 1, name: 1 })
 
   response.json(blogs.map(b => b.toJSON()))
 })
 
-router.post('/', async (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
 
   if (!request.token) {
@@ -42,7 +42,7 @@ router.post('/', async (request, response) => {
   response.status(201).json(result)
 })
 
-router.put('/:id', async (request, response) => {
+blogRouter.put('/:id', async (request, response) => {
   const { author, title, url,likes } = request.body
 
   const blog = {
@@ -55,7 +55,7 @@ router.put('/:id', async (request, response) => {
   response.json(updatedNote.toJSON())
 })
 
-router.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', async (request, response) => {
   if (!request.token) {
     return response.status(401).json({ error: 'token missing' })
   }
@@ -76,4 +76,4 @@ router.delete('/:id', async (request, response) => {
   }
 })
 
-module.exports = router
+module.exports = blogRouter

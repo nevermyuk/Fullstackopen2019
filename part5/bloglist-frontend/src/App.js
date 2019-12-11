@@ -8,6 +8,7 @@ import loginService from './services/login'
 import LoginForm from './components/Login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+
 const App = () => {
 
   const [blogs, setblogs] = useState([]) 
@@ -69,6 +70,7 @@ const App = () => {
       blogs = {blogs}
       key={blog.id}
       blog={blog}
+      notify={notify}
     />
   )
   
@@ -83,30 +85,29 @@ const App = () => {
     setNewURL(event.target.value)
   }
 
-  const addBlog = (event) => {
+  const addBlog = async(event) => {
     event.preventDefault()
     const blogObject = {
       title: newBlog,
       url: newURL,
-      author: newAuthor,
-      likes: 0 
+      author: newAuthor
     }
-
-    blogService
-      .create(blogObject)
-      .then(data => {
-        setblogs(blogs.concat(data))
+    try {
+    const response = await blogService.create(blogObject)
+        setblogs(blogs.concat(response))
         setNewBlog('')
         setNewAuthor('')
         setNewURL('')
-      })
-     notify(`${blogObject.title} by ${blogObject.author} added`)
+        notify(`${blogObject.title} by ${blogObject.author} added`)
+    } catch {
+      notify('Failed, Something went wrong')
+    }
   }
   const notify = (message, type='success') => {
     setNotification({ message, type })
     setTimeout(() => setNotification({ message: null }), 10000)
   }
-  
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
@@ -149,9 +150,13 @@ const App = () => {
           <h1>Create new</h1>
           <Togglable buttonLabel="Create">
   <BlogForm
-    onSubmit={addBlog}
-    value={newBlog}
-    handleChange={handleBlogChange}
+    addBlog={addBlog}
+    newBlog={newBlog}
+    newAuthor={newAuthor}
+    newURL={newURL}
+    handleBlogChange={handleBlogChange}
+    handleAuthorChange={handleAuthorChange}
+    handleURLChange={handleURLChange}
   />
 </Togglable>
           {rows()}

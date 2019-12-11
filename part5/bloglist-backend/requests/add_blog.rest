@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjVkZWU1YTlhNDVkMDdjNGRhMTM0MmRkYyIsImlhdCI6MTU3NjA2OTc3MH0.vwC2Q0l_ejopoN546kRbmS46lkbiFFZvmH1-KsQ1RZg
+
+{
+    "title":"Testing",
+    "author": "Testing",
+    "url":"secret.com"
+}
