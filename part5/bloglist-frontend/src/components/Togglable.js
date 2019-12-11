@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import Proptypes from 'prop-types'
 
-const Togglable = (props) => {
+// eslint-disable-next-line no-unused-vars
+const Togglable = React.forwardRef((props,ref) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -9,7 +11,6 @@ const Togglable = (props) => {
   const toggleVisibility = () => {
     setVisible(!visible)
   }
-
   return (
     <div>
       <div style={hideWhenVisible}>
@@ -21,6 +22,10 @@ const Togglable = (props) => {
       </div>
     </div>
   )
+})
+
+Togglable.propTypes = {
+  buttonLabel: Proptypes.string.isRequired
 }
 
 export default Togglable
