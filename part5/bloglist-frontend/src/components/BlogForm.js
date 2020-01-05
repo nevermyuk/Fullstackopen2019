@@ -13,19 +13,17 @@ const BlogForm = ({
     <div>
   Title:
       <input
-        value={newBlog}
-        onChange={handleBlogChange}
+        {...newBlog}
       />
     </div>
     <div> Author:
       <input
-        value={newAuthor}
-        onChange={handleAuthorChange}
+        {...newAuthor}
       /> </div>
     <div> URL:
       <input
-        value={newURL}
-        onChange={handleURLChange}
+        {...newURL}
+
       /></div>
     <button type="submit">Add</button>
   </form>

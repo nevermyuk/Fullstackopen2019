@@ -8,17 +8,18 @@ import loginService from './services/login'
 import LoginForm from './components/Login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import { useField } from './hooks'
 
 const App = () => {
 
   const [blogs, setblogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newURL, setNewURL] = useState('')
+  const newBlog = useField('text')
+  const newAuthor = useField('text')
+  const newURL = useField('text')
   const [notification, setNotification] = useState({ message:null })
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useField('text')
+  const [password, setPassword] = useField('text')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
 
@@ -48,14 +49,15 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      const user = await loginService.login(
+        username.value, password.value)
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
+      username.onReset()
+      password.onReset()
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -74,30 +76,21 @@ const App = () => {
     />
   )
 
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-  const handleURLChange = (event) => {
-    setNewURL(event.target.value)
-  }
+ 
 
   const addBlog = async (event) => {
     event.preventDefault()
     const blogObject = {
-      title: newBlog,
-      url: newURL,
-      author: newAuthor
+      title: newBlog.value,
+      url: newURL.value,
+      author: newAuthor.value
     }
 
     const response = await blogService.create(blogObject)
     setblogs(blogs.concat(response))
-    setNewBlog('')
-    setNewAuthor('')
-    setNewURL('')
+    newBlog.onReset()
+    newURL.onReset()
+    newAuthor.rest()
     notify(`${blogObject.title} by ${blogObject.author} added`)
 
 
@@ -153,9 +146,6 @@ const App = () => {
               newBlog={newBlog}
               newAuthor={newAuthor}
               newURL={newURL}
-              handleBlogChange={handleBlogChange}
-              handleAuthorChange={handleAuthorChange}
-              handleURLChange={handleURLChange}
             />
           </Togglable>
           {rows()}
