@@ -23,6 +23,9 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
   switch (action.type) {
+    case 'NEW_ANECDOTE':
+        const updatedAnecdote = asObject(action.data)
+        return state.concat(updatedAnecdote)
     case 'ADD_VOTE':
       const id = action.data
       const voted = state.filter(x => x.id === id ? x.votes+=1 : x)
