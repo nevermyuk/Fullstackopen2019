@@ -1,25 +1,29 @@
 import React from 'react'
+import { setNotification } from '../reducers/notificationReducer'
+import { createAnecdote } from '../reducers/anecdoteReducer'
 
-const NewAnecdote = (props) => {
-  const addAnecdote = (event) => {
+const AnecdoteForm = ({store}) => {
+    const addAnecdote = (event) => {
     event.preventDefault()
-    const content = event.target.title.value
-    props.store.dispatch({
-      type: 'NEW_ANECDOTE',
-      data : content
-    })
-    event.target.title.value = ''
+    const content = event.target.anecdote.value
+
+    store.dispatch(createAnecdote(content))
+    store.dispatch(setNotification(`You just added ${content}`))
+    setTimeout(() => {
+      store.dispatch(setNotification(null))
+    }, 5000)
   }
   return (
       <form onSubmit={addAnecdote}>
       <h2>Create New</h2>
-        <div><input name ='title'/></div>
+        <div><input name ='anecdote'/></div>
         <button type='submit'>create</button>
       </form>
   )
-
 }
 
-export default NewAnecdote
+
+
+export default AnecdoteForm
 
 

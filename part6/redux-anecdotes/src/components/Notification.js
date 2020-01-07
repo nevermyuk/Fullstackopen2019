@@ -1,15 +1,17 @@
 import React from 'react'
 
-const Notification = () => {
+const Notification = (props) => {
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
+  console.log("NOTIFICATIONS: ",props.store)
   return (
     <div style={style}>
-      render here notification...
+          {props.store.getState().notification}
     </div>
+
   )
 }
 

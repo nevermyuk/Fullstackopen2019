@@ -1,13 +1,13 @@
 import React from 'react'
+import { addVote } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const Anecdotes = (props) => {
- const anecdotes = props.store.getState()
- const vote = (id) => {
-    console.log('vote', id)
-    props.store.dispatch({
-      type: 'ADD_VOTE',
-      data: id 
-    })
+const Anecdotes = ({store}) => {
+
+ const anecdotes = store.getState().anecdotes
+ const vote = (anecdote) => {
+    store.dispatch(addVote(anecdote.id))
+    store.dispatch(setNotification(`Voted for ${anecdote.content}`))
   }
 
   return (
@@ -20,7 +20,7 @@ const Anecdotes = (props) => {
         </div>
         <div>
           has {anecdote.votes}
-          <button onClick={() => vote(anecdote.id)}>vote</button>
+          <button onClick={() => vote(anecdote)}>vote</button>
         </div>
       </div>
     )}
