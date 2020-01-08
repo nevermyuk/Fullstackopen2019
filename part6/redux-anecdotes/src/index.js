@@ -1,18 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import anecdoteService from './services/anecdotes'
-import { createStore,combineReducers } from 'redux'
 import App from './App'
 import { Provider } from 'react-redux'
-import anecdoteReducer, {initializeAnecdote} from './reducers/anecdoteReducer'
-import notificationReducer from './reducers/notificationReducer'
+import {initializeAnecdote} from './reducers/anecdoteReducer'
+import store from './store'
 
-const reducer = combineReducers({
-  anecdotes: anecdoteReducer,
-  notification : notificationReducer
-})
-
-const store = createStore(reducer)
 
 anecdoteService.getAll().then(anecdotes =>
   store.dispatch(initializeAnecdote(anecdotes)))
