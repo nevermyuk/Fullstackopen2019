@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 import AnecdoteForm from './components/AnecdoteForm'
 import Anecdotes from './components/AnecdoteList'
 import Notifications from './components/Notification'
-import anecdoteService from './services/anecdotes'
 import {initializeAnecdote} from './reducers/anecdoteReducer'
 
 

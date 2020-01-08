@@ -62,10 +62,14 @@ export const initializeAnecdote = (anecdotes) => {
 
 
 export const addVote = (id) => {
-  return {
+  return async dispatch => {
+  const anecdote = await anecdoteService.getID(id)
+  const updated = {...anecdote,votes:anecdote.votes+1}
+  await anecdoteService.addVote(id,updated)
+  dispatch({
      type: 'ADD_VOTE',
      id: id
-   }
+   })}
    
  }
 
