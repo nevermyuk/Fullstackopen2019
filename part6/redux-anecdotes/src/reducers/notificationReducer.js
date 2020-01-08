@@ -8,11 +8,19 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const setNotification = (notification) => {
-  return { 
+export const setNotification = (notification,duration) => {
+  
+  return dispatch => {
+    dispatch({ 
     type: 'SHOW',
     notification
-  }
-}
+  })
+  setTimeout(() => {
+    dispatch({
+      type:'SHOW',
+      notification:null
+    })
+  },duration*1000)
+}}
 
 export default notificationReducer

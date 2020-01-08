@@ -7,10 +7,8 @@ const AnecdoteList = ({anecdotes,addVote,setNotification}) => {
 
  const vote = (anecdote) => {
     addVote(anecdote.id)
-    setNotification(`Voted for ${anecdote.content}`)
-    setTimeout(() =>  {
-      setNotification(null)},5000
-    )
+    setNotification(`Voted for ${anecdote.content}`,10)
+
   }
 
   return (
